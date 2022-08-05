@@ -11,11 +11,12 @@ public class User {
     private String password;
     private Vector<Workout> workouts;
 
-    public User(String username, String password){
-        this.uuid = UUID.randomUUID().toString();
+    public User(String username, String password, String uuid){
+        this.uuid = uuid;
         this.username = username;
         this.password = password;
     }
+
 
     public void addWorkout(Workout workout){
         this.workouts.add(workout);

@@ -1,6 +1,7 @@
 package workout.tracker.session;
 
 public class Set {
+
     private double weight;
     private double reps;
 
