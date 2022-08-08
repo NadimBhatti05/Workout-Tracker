@@ -1,4 +1,6 @@
 package workout.tracker.session;
+import workout.tracker.user.User;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -8,23 +10,27 @@ import java.util.Vector;
 
 public class Workout {
 
-    private String uuid;
-    private String date;
+    private String workoutUUID;
     private String name;
+    private String date;
+    private Vector<Exercise> exercises;
 
     public Workout(String name, String uuid){
-        this.uuid = uuid;
+        exercises = new Vector<>();
+        this.workoutUUID = uuid;
         this.name = name;
         LocalDate today = LocalDate.now();
         this.date = today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
     }
 
+
+
     public String getUuid() {
-        return uuid;
+        return workoutUUID;
     }
 
     public void setUuid(String uuid) {
-        this.uuid = uuid;
+        this.workoutUUID = uuid;
     }
 
     public String getName() {

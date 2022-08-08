@@ -4,25 +4,25 @@ import java.util.Vector;
 
 public class Exercise {
 
-    private String uuid;
+    private String exerciseUUID;
     private String name;
     //private Vector<Set> sets;
-    private Vector<Double> weights;
-    private Vector<Integer> reps;
+    private double[] weights;
+    private int[] reps;
 
 
 
     public Exercise(String name, String uuid) {
         this.name = name;
-        this.uuid = uuid;
+        this.exerciseUUID = uuid;
     }
 
     public String getUuid() {
-        return uuid;
+        return exerciseUUID;
     }
 
     public void setUuid(String uuid) {
-        this.uuid = uuid;
+        this.exerciseUUID = uuid;
     }
 
     /*public Vector<Set> getSets() {

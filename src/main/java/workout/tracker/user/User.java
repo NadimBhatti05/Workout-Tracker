@@ -6,32 +6,32 @@ import java.util.UUID;
 
 public class User {
 
-    private String uuid;
+    private String userUUID;
     private String username;
     private String password;
     private Vector<Workout> workouts;
 
     public User(String username, String password, String uuid){
-        this.uuid = uuid;
+        workouts = new Vector<>();
+        this.userUUID = uuid;
         this.username = username;
         this.password = password;
     }
 
-
-    public void addWorkout(Workout workout){
-        this.workouts.add(workout);
+    public Vector<Workout> getWorkouts() {
+        return workouts;
     }
 
-    public void deleteWorkout(Workout workout){
-        this.workouts.remove(workout);
+    public void setWorkouts(Vector<Workout> workouts) {
+        this.workouts = workouts;
     }
 
     public String getUuid() {
-        return uuid;
+        return userUUID;
     }
 
     public void setUuid(String uuid) {
-        this.uuid = uuid;
+        this.userUUID = uuid;
     }
 
     public String getUsername() {
