@@ -1,6 +1,4 @@
-package workout.tracker.session;
-
-import java.util.Vector;
+package workout.tracker.model;
 
 public class Exercise {
 
@@ -42,4 +40,27 @@ public class Exercise {
         this.name = name;
     }
 
+    public String getExerciseUUID() {
+        return exerciseUUID;
+    }
+
+    public void setExerciseUUID(String exerciseUUID) {
+        this.exerciseUUID = exerciseUUID;
+    }
+
+    public double[] getWeights() {
+        return weights;
+    }
+
+    public void setWeights(double[] weights) {
+        this.weights = weights;
+    }
+
+    public int[] getReps() {
+        return reps;
+    }
+
+    public void setReps(int[] reps) {
+        this.reps = reps;
+    }
 }

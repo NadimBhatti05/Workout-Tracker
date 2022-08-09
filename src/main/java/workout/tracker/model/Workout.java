@@ -1,7 +1,5 @@
-package workout.tracker.session;
-import workout.tracker.user.User;
+package workout.tracker.model;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -15,12 +13,16 @@ public class Workout {
     private String date;
     private Vector<Exercise> exercises;
 
-    public Workout(String name, String uuid){
+    public Workout(String name, String uuid, String date){
         exercises = new Vector<>();
         this.workoutUUID = uuid;
         this.name = name;
+        this.date = date;
+        /*
         LocalDate today = LocalDate.now();
         this.date = today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+
+         */
     }
 
 
@@ -43,5 +45,17 @@ public class Workout {
 
     public String getDate() {
         return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Vector<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public void setExercises(Vector<Exercise> exercises) {
+        this.exercises = exercises;
     }
 }

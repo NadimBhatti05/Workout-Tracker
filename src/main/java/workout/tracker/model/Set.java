@@ -1,4 +1,4 @@
-package workout.tracker.session;
+package workout.tracker.model;
 
 public class Set {
 

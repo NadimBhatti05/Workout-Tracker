@@ -1,8 +1,7 @@
 package workout.tracker.user;
-import workout.tracker.session.Workout;
+import workout.tracker.model.Workout;
 
 import java.util.Vector;
-import java.util.UUID;
 
 public class User {
 

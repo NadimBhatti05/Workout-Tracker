@@ -1,18 +1,18 @@
 [
-	{
-		"userUUID": "08ca91aa-a269-407b-9753-6a2a5d8d421c",
-		"username":"NadimBhatti",
-		"password": "1234",
-		"workoutsUUID": [
-			"472cef8e-0865-4368-ada9-53b93c0bf547"
-		]
-	},
-	{
-		"userUUID": "b40acdc0-9419-4479-80fa-9ff1ace05c74",
-		"username":"KimTunger",
-		"password": "4321",
-		"workoutsUUID": [
-			"d54c370f-29cd-4370-8aa1-32cbce8810c9"
-		]
-	}
+  {
+    "password": "1234",
+    "workoutsUUID": [
+      "472cef8e-0865-4368-ada9-53b93c0bf547"
+    ],
+    "userUUID": "08ca91aa-a269-407b-9753-6a2a5d8d421c",
+    "username": "NadimBhatti"
+  },
+  {
+    "password": "4321",
+    "workoutsUUID": [
+      "d54c370f-29cd-4370-8aa1-32cbce8810c9"
+    ],
+    "userUUID": "b40acdc0-9419-4479-80fa-9ff1ace05c74",
+    "username": "KimTunger"
+  }
 ]

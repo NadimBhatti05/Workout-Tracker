@@ -1,8 +1,8 @@
 package workout.tracker.data;
 
 
-import workout.tracker.session.Exercise;
-import workout.tracker.session.Workout;
+import workout.tracker.model.Exercise;
+import workout.tracker.model.Workout;
 import workout.tracker.user.User;
 
 import java.io.*;
@@ -12,7 +12,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Vector;
 
@@ -20,6 +19,14 @@ public class DataHandler {
     private static List<User> userList;
     private static List<Workout> workoutList;
     private static List<Exercise> exerciseList;
+
+    public DataHandler(){}
+
+    public static void main(String[] args) {
+        writeUserJSON();
+        writeWorkoutJSON();
+        writeExerciseJSON();
+    }
 
     public static void initializeLists(){
         DataHandler.setUserList(null);
@@ -36,12 +43,12 @@ public class DataHandler {
             jsonObject.put("password", getUserList().get(i).getPassword());
             JSONArray workouts = new JSONArray();
             for (int j = 0; j < getUserList().get(i).getWorkouts().size(); j++) {
-                workouts.add(getUserList().get(i).getWorkouts().get(j));
+                workouts.add(getUserList().get(i).getWorkouts().get(j).getUuid());
             }
             jsonObject.put("workoutsUUID", workouts);
             allUsers.add(jsonObject);
         }
-        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/usersTest.json")) {
+        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/users.json")) {
             file.write(allUsers.toJSONString());
             file.flush();
         }catch (IOException e){
@@ -75,15 +82,15 @@ public class DataHandler {
             workouts.add(object.toString());
         }
         User user1 = new User(username, password, uuid);
+        user1.setWorkouts(readWorkoutsByUUID(workouts));
         getUserList().add(user1);
-        //user1.setWorkouts(readWorkoutsByUUID(workouts));
     }
 
     public static Vector<Workout> readWorkoutsByUUID(Vector<String> UUIDs){
         Vector<Workout> workouts = new Vector<>();
         for (int i = 0; i < getWorkoutList().size(); i++) {
             for (int j = 0; j < UUIDs.size(); j++) {
-                if(getWorkoutList().get(i).equals(UUIDs.get(j))){
+                if(getWorkoutList().get(i).getUuid().equals(UUIDs.get(j))){
                     workouts.add(getWorkoutList().get(i));
                 }
             }
@@ -91,9 +98,6 @@ public class DataHandler {
         return workouts;
     }
 
-    public static void main(String[] args) {
-        writeUserJSON();
-    }
 
     public static List<User> getUserList() {
         if(DataHandler.userList == null){
@@ -107,7 +111,75 @@ public class DataHandler {
         DataHandler.userList = userList;
     }
 
+    private static void writeWorkoutJSON(){
+        JSONArray allWorkouts = new JSONArray();
+        for (int i = 0; i < getWorkoutList().size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("workoutUUID", getWorkoutList().get(i).getUuid());
+            jsonObject.put("name", getWorkoutList().get(i).getName());
+            jsonObject.put("date", getWorkoutList().get(i).getDate());
+            JSONArray exercises = new JSONArray();
+            for (int j = 0; j < getWorkoutList().get(i).getExercises().size(); j++) {
+                exercises.add(getWorkoutList().get(i).getExercises().get(j).getUuid());
+            }
+            jsonObject.put("exercisesUUID", exercises);
+            allWorkouts.add(jsonObject);
+        }
+        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/workouts.json")) {
+            file.write(allWorkouts.toJSONString());
+            file.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void readWorkoutJSON(){
+        JSONParser jsonParser = new JSONParser();
+        try(FileReader reader = new FileReader("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/workouts.json")){
+            Object obj = jsonParser.parse(reader);
+            JSONArray allWorkouts = (JSONArray) obj;
+            allWorkouts.forEach( workout -> parseWorkoutObject((JSONObject) workout) );
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void parseWorkoutObject(JSONObject workout){
+        String uuid = (String) workout.get("workoutUUID");
+        String name = (String) workout.get("name");
+        String date = (String) workout.get("date");
+        JSONArray arr = (JSONArray) workout.get("exercisesUUID");
+        Vector<String> exercises = new Vector<>();
+        for (Object object : arr){
+            exercises.add(object.toString());
+        }
+        Workout workout1 = new Workout(name, uuid, date);
+        workout1.setExercises(readExercisesByUUID(exercises));
+        getWorkoutList().add(workout1);
+    }
+
+    public static Vector<Exercise> readExercisesByUUID(Vector<String> UUIDs){
+        Vector<Exercise> exercises = new Vector<>();
+        for (int i = 0; i < getExerciseList().size(); i++) {
+            for (int j = 0; j < UUIDs.size(); j++) {
+                if(getExerciseList().get(i).getUuid().equals(UUIDs.get(j))){
+                    exercises.add(getExerciseList().get(i));
+                }
+            }
+        }
+        return exercises;
+    }
+
     public static List<Workout> getWorkoutList() {
+        if(DataHandler.workoutList == null){
+            DataHandler.setWorkoutList(new Vector<>());
+            readWorkoutJSON();
+        }
         return workoutList;
     }
 
@@ -115,7 +187,72 @@ public class DataHandler {
         DataHandler.workoutList = workoutList;
     }
 
+    private static void writeExerciseJSON(){
+        JSONArray allExercises = new JSONArray();
+        for (int i = 0; i < getExerciseList().size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("exerciseUUID", getExerciseList().get(i).getUuid());
+            jsonObject.put("name", getExerciseList().get(i).getName());
+            JSONArray weights = new JSONArray();
+            JSONArray reps = new JSONArray();
+            for (int j = 0; j < getExerciseList().get(i).getWeights().length; j++) {
+                weights.add(getExerciseList().get(i).getWeights()[j]);
+            }
+            jsonObject.put("weights", weights);
+            for (int j = 0; j < getExerciseList().get(i).getReps().length; j++) {
+                reps.add(getExerciseList().get(i).getReps()[j]);
+            }
+            jsonObject.put("reps", reps);
+            allExercises.add(jsonObject);
+        }
+        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/exercises.json")) {
+            file.write(allExercises.toJSONString());
+            file.flush();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void readExerciseJSON(){
+        JSONParser jsonParser = new JSONParser();
+        try(FileReader reader = new FileReader("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/exercises.json")){
+            Object obj = jsonParser.parse(reader);
+            JSONArray allWorkouts = (JSONArray) obj;
+            allWorkouts.forEach( exercise -> parseExerciseObject((JSONObject) exercise) );
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e){
+            e.printStackTrace();
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void parseExerciseObject(JSONObject exercise){
+        String uuid = (String) exercise.get("exerciseUUID");
+        String name = (String) exercise.get("name");
+        JSONArray weightsArr = (JSONArray) exercise.get("weights");
+        JSONArray repsArr = (JSONArray) exercise.get("reps");
+        double[] weights = new double[weightsArr.size()];
+        int[] reps = new int[repsArr.size()];
+        for (int i = 0; i < weights.length; i++) {
+            weights[i] = Double.parseDouble(weightsArr.get(i).toString());
+        }
+        for (int i = 0; i < reps.length; i++) {
+            reps[i] = Integer.parseInt(repsArr.get(i).toString());
+        }
+        Exercise exercise1 = new Exercise(name, uuid);
+        exercise1.setWeights(weights);
+        exercise1.setReps(reps);
+        getExerciseList().add(exercise1);
+    }
+
     public static List<Exercise> getExerciseList() {
+        if(DataHandler.exerciseList == null){
+            DataHandler.setExerciseList(new Vector<>());
+            readExerciseJSON();
+        }
         return exerciseList;
     }
 
