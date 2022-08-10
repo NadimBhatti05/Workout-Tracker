@@ -13,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.Vector;
 
 public class DataHandler {
@@ -22,11 +23,8 @@ public class DataHandler {
 
     public DataHandler(){}
 
-    public static void main(String[] args) {
-        writeUserJSON();
-        writeWorkoutJSON();
-        writeExerciseJSON();
-    }
+    //main method for testing purposes
+    public static void main(String[] args) {}
 
     public static void initializeLists(){
         DataHandler.setUserList(null);
@@ -81,7 +79,10 @@ public class DataHandler {
         for (Object object : arr){
             workouts.add(object.toString());
         }
-        User user1 = new User(username, password, uuid);
+        User user1 = new User();
+        user1.setUsername(username);
+        user1.setPassword(password);
+        user1.setUuid(uuid);
         user1.setWorkouts(readWorkoutsByUUID(workouts));
         getUserList().add(user1);
     }
@@ -96,6 +97,22 @@ public class DataHandler {
             }
         }
         return workouts;
+    }
+
+    public static User readUser(String username, String password){
+        User user = null;
+        for (User u : getUserList()) {
+            if (u.getUsername().equals(username) &&
+                    u.getPassword().equals(password)) {
+                user = u;
+            }
+        }
+        return user;
+    }
+
+    public static void insertUser(User user){
+        getUserList().add(user);
+        writeUserJSON();
     }
 
 
@@ -158,7 +175,10 @@ public class DataHandler {
         for (Object object : arr){
             exercises.add(object.toString());
         }
-        Workout workout1 = new Workout(name, uuid, date);
+        Workout workout1 = new Workout();
+        workout1.setName(name);
+        workout1.setDate(date);
+        workout1.setUuid(uuid);
         workout1.setExercises(readExercisesByUUID(exercises));
         getWorkoutList().add(workout1);
     }
@@ -173,6 +193,32 @@ public class DataHandler {
             }
         }
         return exercises;
+    }
+
+    public static Workout readWorkout(String uuid){
+        Workout workout = null;
+        for (Workout w : getWorkoutList()) {
+            if (w.getUuid().equals(uuid)) {
+                workout = w;
+            }
+        }
+        return workout;
+    }
+
+    public static void insertWorkout(Workout workout){
+        getWorkoutList().add(workout);
+        writeWorkoutJSON();
+    }
+
+    public static boolean deleteWorkout(String uuid) {
+        Workout workout = readWorkout(uuid);
+        if (workout != null) {
+            getWorkoutList().remove(workout);
+            writeWorkoutJSON();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static List<Workout> getWorkoutList() {
@@ -242,10 +288,38 @@ public class DataHandler {
         for (int i = 0; i < reps.length; i++) {
             reps[i] = Integer.parseInt(repsArr.get(i).toString());
         }
-        Exercise exercise1 = new Exercise(name, uuid);
+        Exercise exercise1 = new Exercise();
+        exercise1.setName(name);
+        exercise1.setUuid(uuid);
         exercise1.setWeights(weights);
         exercise1.setReps(reps);
         getExerciseList().add(exercise1);
+    }
+
+    public static Exercise readExercise(String uuid){
+        Exercise exercise = null;
+        for (Exercise e : getExerciseList()) {
+            if (e.getUuid().equals(uuid)) {
+                exercise = e;
+            }
+        }
+        return exercise;
+    }
+
+    public static void insertExercise(Exercise exercise){
+        getExerciseList().add(exercise);
+        writeExerciseJSON();
+    }
+
+    public static boolean deleteExercise(String uuid) {
+        Exercise exercise = readExercise(uuid);
+        if (exercise != null) {
+            getExerciseList().remove(exercise);
+            writeExerciseJSON();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static List<Exercise> getExerciseList() {

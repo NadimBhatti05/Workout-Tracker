@@ -1,3 +1,4 @@
+import workout.tracker.gui.Login;
 import workout.tracker.model.Workout;
 
 import java.time.LocalDate;
@@ -9,7 +10,9 @@ public class App {
 
     public static void main(String[] args) {
         LocalDate today = LocalDate.now();
+        /*
         Workout workout = new Workout("Push", UUID.randomUUID().toString(), today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
         System.out.println(workout.getDate() + "\n" + workout.getUuid());
+         */
     }
 }

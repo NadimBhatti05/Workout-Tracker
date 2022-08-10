@@ -10,10 +10,7 @@ public class Exercise {
 
 
 
-    public Exercise(String name, String uuid) {
-        this.name = name;
-        this.exerciseUUID = uuid;
-    }
+    public Exercise() {}
 
     public String getUuid() {
         return exerciseUUID;

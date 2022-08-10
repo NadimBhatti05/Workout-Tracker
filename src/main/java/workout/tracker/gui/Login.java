@@ -1,10 +1,15 @@
 package workout.tracker.gui;
 
+import workout.tracker.data.DataHandler;
+import workout.tracker.user.User;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.UUID;
+import java.util.Vector;
 
 public class Login extends JFrame{
 
@@ -61,7 +66,7 @@ public class Login extends JFrame{
         panel3SI = new JPanel(new BorderLayout());
         panel3SI.add(signInButton, BorderLayout.EAST);
         panel1SI.add(panel3SI, BorderLayout.SOUTH);
-        panel1SI.setBorder(new EmptyBorder(30, 10, 0, 10));
+        panel1SI.setBorder(new EmptyBorder(40, 10, 0, 10));
 
         panel1SU = new JPanel(new BorderLayout());
         panel2SU = new JPanel(new BorderLayout());
@@ -82,6 +87,46 @@ public class Login extends JFrame{
         tabbedPane.addTab("Sign in", panel1SI);
         tabbedPane.addTab("Sign up", panel1SU);
         add(tabbedPane);
+
+        signInButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                User user = DataHandler.readUser(usernameTextSI.getText(), passwordTextSI.getText());
+                if(user == null){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Wrong username or password, please try again",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+
+                    );
+                }else {
+                    dispose();
+                }
+            }
+        });
+
+        signUpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(passwordTextSU.getText().equals(confirmTextSU.getText())){
+                    User user = new User();
+                    user.setUsername(usernameTextSU.getText());
+                    user.setPassword(passwordTextSU.getText());
+                    user.setUuid(UUID.randomUUID().toString());
+                    user.setWorkouts(new Vector<>());
+                    DataHandler.insertUser(user);
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Passwords don't match, please try again",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {

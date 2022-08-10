@@ -10,11 +10,8 @@ public class User {
     private String password;
     private Vector<Workout> workouts;
 
-    public User(String username, String password, String uuid){
+    public User(){
         workouts = new Vector<>();
-        this.userUUID = uuid;
-        this.username = username;
-        this.password = password;
     }
 
     public Vector<Workout> getWorkouts() {

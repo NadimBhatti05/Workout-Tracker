@@ -13,15 +13,11 @@ public class Workout {
     private String date;
     private Vector<Exercise> exercises;
 
-    public Workout(String name, String uuid, String date){
+    public Workout(){
         exercises = new Vector<>();
-        this.workoutUUID = uuid;
-        this.name = name;
-        this.date = date;
         /*
         LocalDate today = LocalDate.now();
         this.date = today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
-
          */
     }
 
