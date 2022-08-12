@@ -24,7 +24,11 @@ public class DataHandler {
     public DataHandler(){}
 
     //main method for testing purposes
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        writeUserJSON();
+        writeWorkoutJSON();
+        writeExerciseJSON();
+    }
 
     public static void initializeLists(){
         DataHandler.setUserList(null);
@@ -205,7 +209,9 @@ public class DataHandler {
         return workout;
     }
 
-    public static void insertWorkout(Workout workout){
+    public static void insertWorkout(User user, Workout workout){
+        user.addWorkout(workout);
+        writeUserJSON();
         getWorkoutList().add(workout);
         writeWorkoutJSON();
     }

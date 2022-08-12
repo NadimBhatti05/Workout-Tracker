@@ -14,6 +14,9 @@ public class User {
         workouts = new Vector<>();
     }
 
+    public void addWorkout(Workout workout){
+        this.workouts.add((workout));
+    }
     public Vector<Workout> getWorkouts() {
         return workouts;
     }

@@ -43,10 +43,11 @@ public class Login extends JFrame{
 
     public Login(){
         setTitle("Login");
-        setSize(350, 200);
+        //setSize(350, 200);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         components();
+        pack();
         setVisible(true);
     }
 
@@ -66,7 +67,6 @@ public class Login extends JFrame{
         panel3SI = new JPanel(new BorderLayout());
         panel3SI.add(signInButton, BorderLayout.EAST);
         panel1SI.add(panel3SI, BorderLayout.SOUTH);
-        panel1SI.setBorder(new EmptyBorder(40, 10, 0, 10));
 
         panel1SU = new JPanel(new BorderLayout());
         panel2SU = new JPanel(new BorderLayout());
@@ -82,7 +82,6 @@ public class Login extends JFrame{
         panel3SU = new JPanel(new BorderLayout());
         panel3SU.add(signUpButton, BorderLayout.EAST);
         panel1SU.add(panel3SU, BorderLayout.SOUTH);
-        panel1SU.setBorder(new EmptyBorder(30, 10, 0, 10));
 
         tabbedPane.addTab("Sign in", panel1SI);
         tabbedPane.addTab("Sign up", panel1SU);
@@ -101,6 +100,7 @@ public class Login extends JFrame{
 
                     );
                 }else {
+                    new MainFrame(user);
                     dispose();
                 }
             }
@@ -109,13 +109,22 @@ public class Login extends JFrame{
         signUpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(passwordTextSU.getText().equals(confirmTextSU.getText())){
+                if(usernameTextSU.getText().equals("") || passwordTextSU.getText().equals("")){
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Username or password can't be empty",
+                            "error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+                else if(passwordTextSU.getText().equals(confirmTextSU.getText())){
                     User user = new User();
                     user.setUsername(usernameTextSU.getText());
                     user.setPassword(passwordTextSU.getText());
                     user.setUuid(UUID.randomUUID().toString());
                     user.setWorkouts(new Vector<>());
                     DataHandler.insertUser(user);
+                    new MainFrame(user);
                     dispose();
                 }else{
                     JOptionPane.showMessageDialog(
@@ -127,9 +136,5 @@ public class Login extends JFrame{
                 }
             }
         });
-    }
-
-    public static void main(String[] args) {
-        new Login();
     }
 }
