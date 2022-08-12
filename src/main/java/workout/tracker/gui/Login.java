@@ -43,7 +43,7 @@ public class Login extends JFrame{
 
     public Login(){
         setTitle("Login");
-        //setSize(350, 200);
+        setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         components();

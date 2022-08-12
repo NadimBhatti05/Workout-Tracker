@@ -1,1 +1,22 @@
-[{"date":"8. August 2022","name":"Push","workoutUUID":"472cef8e-0865-4368-ada9-53b93c0bf547","exercisesUUID":["5773f2e5-750c-424c-b62a-7577b64b0c14","1cf8cbe7-0830-4979-ae6d-a9a9a1c4f845","2a831ce3-3060-416b-8524-dae1166420ff"]},{"date":"9. August 2022","name":"Legs","workoutUUID":"d54c370f-29cd-4370-8aa1-32cbce8810c9","exercisesUUID":["04dfeef3-6a91-45ab-8cfa-537cfae899ec","f42977e3-fb8d-457d-a42c-d5fea530a6d1","a621415f-dde1-4c6f-8e33-5b9b7f09c325"]}]
+[
+  {
+    "date": "8/8/22",
+    "name": "Push",
+    "workoutUUID": "472cef8e-0865-4368-ada9-53b93c0bf547",
+    "exercisesUUID": [
+      "5773f2e5-750c-424c-b62a-7577b64b0c14",
+      "1cf8cbe7-0830-4979-ae6d-a9a9a1c4f845",
+      "2a831ce3-3060-416b-8524-dae1166420ff"
+    ]
+  },
+  {
+    "date": "9/8/22",
+    "name": "Legs",
+    "workoutUUID": "d54c370f-29cd-4370-8aa1-32cbce8810c9",
+    "exercisesUUID": [
+      "04dfeef3-6a91-45ab-8cfa-537cfae899ec",
+      "f42977e3-fb8d-457d-a42c-d5fea530a6d1",
+      "a621415f-dde1-4c6f-8e33-5b9b7f09c325"
+    ]
+  }
+]
