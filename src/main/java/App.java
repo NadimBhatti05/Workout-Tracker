@@ -14,6 +14,7 @@ public class App {
         new Login();
         //new MainFrame(DataHandler.readUser("KimTunger", "34"));
         LocalDate today = LocalDate.now();
+        System.out.println(System.getProperty("user.dir"));
         /*
         Workout workout = new Workout("Push", UUID.randomUUID().toString(), today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
         System.out.println(workout.getDate() + "\n" + workout.getUuid());

@@ -50,7 +50,7 @@ public class DataHandler {
             jsonObject.put("workoutsUUID", workouts);
             allUsers.add(jsonObject);
         }
-        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/users.json")) {
+        try(FileWriter file = new FileWriter(System.getProperty("user.dir") + "\\src\\main\\java\\JSON\\users.json")) {
             file.write(allUsers.toJSONString());
             file.flush();
         }catch (IOException e){
@@ -60,7 +60,7 @@ public class DataHandler {
 
     private static void readUserJSON(){
         JSONParser jsonParser = new JSONParser();
-        try(FileReader reader = new FileReader("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/users.json")){
+        try(FileReader reader = new FileReader(System.getProperty("user.dir") + "\\src\\main\\java\\JSON\\users.json")){
             Object obj = jsonParser.parse(reader);
             JSONArray allUsers = (JSONArray) obj;
             allUsers.forEach( user -> parseUserObject((JSONObject) user) );
@@ -146,7 +146,7 @@ public class DataHandler {
             jsonObject.put("exercisesUUID", exercises);
             allWorkouts.add(jsonObject);
         }
-        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/workouts.json")) {
+        try(FileWriter file = new FileWriter(System.getProperty("user.dir") + "\\src\\main\\java\\JSON\\workouts.json")) {
             file.write(allWorkouts.toJSONString());
             file.flush();
         }catch (IOException e){
@@ -156,7 +156,7 @@ public class DataHandler {
 
     private static void readWorkoutJSON(){
         JSONParser jsonParser = new JSONParser();
-        try(FileReader reader = new FileReader("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/workouts.json")){
+        try(FileReader reader = new FileReader(System.getProperty("user.dir") + "\\src\\main\\java\\JSON\\workouts.json")){
             Object obj = jsonParser.parse(reader);
             JSONArray allWorkouts = (JSONArray) obj;
             allWorkouts.forEach( workout -> parseWorkoutObject((JSONObject) workout) );
@@ -257,7 +257,7 @@ public class DataHandler {
             jsonObject.put("reps", reps);
             allExercises.add(jsonObject);
         }
-        try(FileWriter file = new FileWriter("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/exercises.json")) {
+        try(FileWriter file = new FileWriter(System.getProperty("user.dir") + "\\src\\\\main\\\\java\\\\JSON\\\\exercises.json")) {
             file.write(allExercises.toJSONString());
             file.flush();
         }catch (IOException e){
@@ -267,7 +267,7 @@ public class DataHandler {
 
     private static void readExerciseJSON(){
         JSONParser jsonParser = new JSONParser();
-        try(FileReader reader = new FileReader("C:/Users/bhatt/OneDrive/projects/Java/Workout-Tracker/src/main/java/JSON/exercises.json")){
+        try(FileReader reader = new FileReader(System.getProperty("user.dir") + "\\src\\main\\java\\JSON\\exercises.json")){
             Object obj = jsonParser.parse(reader);
             JSONArray allWorkouts = (JSONArray) obj;
             allWorkouts.forEach( exercise -> parseExerciseObject((JSONObject) exercise) );
