@@ -2,6 +2,7 @@
   {
     "password": "1234",
     "workoutsUUID": [
+      "44c140b4-cb1f-4091-9238-060e847806a1",
       "472cef8e-0865-4368-ada9-53b93c0bf547"
     ],
     "userUUID": "08ca91aa-a269-407b-9753-6a2a5d8d421c",
@@ -14,17 +15,5 @@
     ],
     "userUUID": "b40acdc0-9419-4479-80fa-9ff1ace05c74",
     "username": "KimTunger"
-  },
-  {
-    "password": "1234",
-    "workoutsUUID": [],
-    "userUUID": "0e285288-e368-4d54-a1ce-49c64ce5566a",
-    "username": "Nader"
-  },
-  {
-    "password": "",
-    "workoutsUUID": [],
-    "userUUID": "2343a2ba-f904-4694-98f3-6f5b731f24bf",
-    "username": ""
   }
 ]

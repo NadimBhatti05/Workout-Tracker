@@ -18,18 +18,25 @@ public class MainFrame extends JFrame {
         setTitle("My Workouts");
         setLocationRelativeTo(null);
         setResizable(false);
+        setSize(400, 700);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         components();
-        pack();
         setVisible(true);
     }
 
     public void components() {
-        this.setLayout(new GridLayout(user.getWorkouts().size(), 1));
+        this.setLayout(new BorderLayout());
+        JPanel panel1 = new JPanel(new GridLayout(user.getWorkouts().size(), 1));
+        JPanel panel2 = new JPanel(new BorderLayout());
+        JButton button = new JButton("New Workout");
         workouts = new JList<>();
         for (int i = 0; i < user.getWorkouts().size(); i++) {
-            this.add(createWorkoutPanel(user.getWorkouts().get(i)));
+            panel1.add(createWorkoutPanel(user.getWorkouts().get(i)));
         }
+        panel2.add(button, BorderLayout.EAST);
+        JScrollPane scrollPane = new JScrollPane(panel1);
+        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(panel2, BorderLayout.SOUTH);
     }
 
     public JPanel createWorkoutPanel(Workout workout) {
@@ -65,6 +72,7 @@ public class MainFrame extends JFrame {
         panel2.add(panel1, BorderLayout.CENTER);
         panel2.add(label, BorderLayout.NORTH);
         panel2.setBorder(new EmptyBorder(5, 0, 10, 0));
+        System.out.println(table.getRowCount());
         return panel2;
     }
 }
