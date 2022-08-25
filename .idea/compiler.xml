@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Workout-Tracker" target="18" />
+      <module name="Workout-Tracker" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>
