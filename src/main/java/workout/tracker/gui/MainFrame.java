@@ -8,8 +8,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.Vector;
 
 public class MainFrame extends JFrame {
@@ -94,10 +93,12 @@ public class MainFrame extends JFrame {
 }
 class InsertWorkout extends JDialog implements ActionListener{
 
-    private JTable table;
     private JTextField title;
     private JLabel titleLable;
     private JButton submit;
+    private JTextField amount;
+    private JLabel amountLable;
+    private JButton generate;
     private JPanel panel1;
     private JPanel panel2;
     private JPanel panel3;
@@ -109,10 +110,9 @@ class InsertWorkout extends JDialog implements ActionListener{
         setTitle("New Workout");
         setLocationRelativeTo(null);
         setResizable(false);
-        //setSize(300, 400);
+        setSize(400, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         components();
-        pack();
         setVisible(true);
     }
 
@@ -121,24 +121,109 @@ class InsertWorkout extends JDialog implements ActionListener{
         title = new JTextField();
         titleLable = new JLabel("Title: ");
         submit = new JButton("Submit");
-        panel1 = new JPanel(new GridLayout(1, 2));
+        submit.setEnabled(false);
+        amount = new JTextField();
+        amountLable = new JLabel("Amount of Exercises: ");
+        generate = new JButton("Generate");
+        generate.addActionListener(this);
+        panel1 = new JPanel(new GridLayout(2, 2));
         panel2 = new JPanel(new BorderLayout());
+        panel3 = new JPanel(new BorderLayout());
+        panel4 = new JPanel(new BorderLayout());
+        panel5 = new JPanel();
+        panel5.setLayout(new BoxLayout(panel5, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(panel5);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         panel1.add(titleLable);
         panel1.add(title);
+        panel1.add(amountLable);
+        panel1.add(amount);
         panel2.add(submit, BorderLayout.EAST);
-        this.add(panel1, BorderLayout.NORTH);
+        panel3.add(generate, BorderLayout.EAST);
+        panel1.setBorder(new EmptyBorder(0, 0, 5, 0));
+        panel4.add(panel1, BorderLayout.CENTER);
+        panel4.add(panel3, BorderLayout.SOUTH);
+        panel4.setBorder(new EmptyBorder(10, 10, 10, 10));
+        this.add(panel4, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);
         this.add(panel2, BorderLayout.SOUTH);
-        /*
+    }
+
+    public JPanel createExercisePanel(){
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        JPanel tableHeadingPanel = new JPanel(new BorderLayout());
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        JTextField titleField = new JTextField("Exercise name");
+        titleField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                titleField.setText("");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                titleField.setText("Exercise name");
+            }
+        });
+        JButton button = new JButton("Add Set");
+        buttonPanel.add(button, BorderLayout.WEST);
+        tablePanel.add(buttonPanel, BorderLayout.SOUTH);
+        JTable table;
         String [] colHeadings = {"Set", "Weight", "Reps"};
-        int numRows = 5 ;
+        int numRows = 0;
         DefaultTableModel model = new DefaultTableModel(numRows, colHeadings.length);
         model.setColumnIdentifiers (colHeadings);
         table = new JTable (model);
-         */
+        tableHeadingPanel.add(table, BorderLayout.CENTER);
+        tableHeadingPanel.add(table.getTableHeader(), BorderLayout.NORTH);
+        tablePanel.add(tableHeadingPanel, BorderLayout.CENTER);
+        tablePanel.add(titleField, BorderLayout.NORTH);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.addRow(
+                    new Object[]{
+                        table.getRowCount()+1,
+                        "",
+                        ""
+                    }
+                );
+            }
+        });
+        tablePanel.setBorder(new EmptyBorder(15, 10, 15, 10));
+        return tablePanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        submit.setEnabled(true);
+        if(!isNumeric(amount.getText())){
+            JOptionPane.showMessageDialog(
+                null,
+                "Amount of Exercises is not an integer",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+            generate.setEnabled(true);
+        }else{
+            for (int i = 0; i < Integer.parseInt(amount.getText()); i++) {
+                panel5.add(createExercisePanel());
+            }
+            generate.setEnabled(false);
+        }
+        panel5.revalidate();
+        validate();
+    }
 
+    public boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }
