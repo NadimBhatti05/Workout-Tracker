@@ -1,5 +1,6 @@
 package workout.tracker.gui;
 
+import workout.tracker.data.DataHandler;
 import workout.tracker.model.Exercise;
 import workout.tracker.model.Workout;
 import workout.tracker.user.User;
@@ -9,6 +10,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.print.PrinterException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.UUID;
 import java.util.Vector;
 
 public class MainFrame extends JFrame {
@@ -18,7 +24,6 @@ public class MainFrame extends JFrame {
     public MainFrame(User user) {
         this.user = user;
         setTitle("My Workouts");
-        setLocationRelativeTo(null);
         setResizable(false);
         setSize(400, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -28,9 +33,11 @@ public class MainFrame extends JFrame {
 
     public void components() {
         this.setLayout(new BorderLayout());
-        JPanel panel1 = new JPanel(new FlowLayout());
+        JPanel panel1 = new JPanel();
+        panel1.setLayout(new BoxLayout(panel1,  BoxLayout.Y_AXIS));
         JPanel panel2 = new JPanel(new BorderLayout());
         JButton button = new JButton("New Workout");
+        JButton button1 = new JButton("Reload");
         this.workouts = new JList<>();
         int v = 0;
         for (int i = 0; i < user.getWorkouts().size(); i++) {
@@ -40,11 +47,19 @@ public class MainFrame extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new InsertWorkout();
+                new InsertWorkout(user);
+            }
+        });
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MainFrame(user);
+                dispose();
             }
         });
         panel2.add(button, BorderLayout.EAST);
-        panel1.setPreferredSize(new Dimension(400, v));
+        panel2.add(button1, BorderLayout.WEST);
+        //panel1.setPreferredSize(new Dimension(400, v));
         JScrollPane scrollPane = new JScrollPane(panel1);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(scrollPane, BorderLayout.CENTER);
@@ -93,6 +108,8 @@ public class MainFrame extends JFrame {
 }
 class InsertWorkout extends JDialog implements ActionListener{
 
+    private Vector<JTextField> names;
+    private Vector<JTable> tables;
     private JTextField title;
     private JLabel titleLable;
     private JButton submit;
@@ -104,11 +121,11 @@ class InsertWorkout extends JDialog implements ActionListener{
     private JPanel panel3;
     private JPanel panel4;
     private JPanel panel5;
-    private JPanel panel6;
+    private User user;
 
-    public InsertWorkout(){
+    public InsertWorkout(User user){
+        this.user = user;
         setTitle("New Workout");
-        setLocationRelativeTo(null);
         setResizable(false);
         setSize(400, 500);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -117,6 +134,8 @@ class InsertWorkout extends JDialog implements ActionListener{
     }
 
     public void components(){
+        names = new Vector<>();
+        tables = new Vector<>();
         setLayout(new BorderLayout());
         title = new JTextField();
         titleLable = new JLabel("Title: ");
@@ -147,6 +166,35 @@ class InsertWorkout extends JDialog implements ActionListener{
         this.add(panel4, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(panel2, BorderLayout.SOUTH);
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Workout workout = new Workout();
+                Vector<Exercise> exercises = new Vector<>();
+                for (int i = 0; i < tables.size(); i++) {
+                    Exercise exercise = new Exercise();
+                    double[] weights = new double[tables.get(i).getRowCount()];
+                    int [] reps = new int[tables.get(i).getRowCount()];
+                    for (int j = 0; j < tables.get(i).getRowCount(); j++) {
+                        weights[i] = Double.parseDouble(String.valueOf(tables.get(i).getModel().getValueAt(i, 1)));
+                        reps[i] = Integer.parseInt(String.valueOf(tables.get(i).getModel().getValueAt(i, 2)));
+                    }
+                    exercise.setName(names.get(i).getText());
+                    exercise.setExerciseUUID(UUID.randomUUID().toString());
+                    exercise.setReps(reps);
+                    exercise.setWeights(weights);
+                    exercises.add(exercise);
+                    DataHandler.insertExercise(exercise);
+                }
+                LocalDate today = LocalDate.now();
+                workout.setDate(today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
+                workout.setName(title.getText());
+                workout.setExercises(exercises);
+                workout.setUuid(UUID.randomUUID().toString());
+                DataHandler.insertWorkout(user, workout);
+                dispose();
+            }
+        });
     }
 
     public JPanel createExercisePanel(){
@@ -162,9 +210,12 @@ class InsertWorkout extends JDialog implements ActionListener{
 
             @Override
             public void focusLost(FocusEvent e) {
-                titleField.setText("Exercise name");
+                if(titleField.getText().equals("")){
+                    titleField.setText("Exercise name");
+                }
             }
         });
+        names.add(titleField);
         JButton button = new JButton("Add Set");
         buttonPanel.add(button, BorderLayout.WEST);
         tablePanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -174,6 +225,7 @@ class InsertWorkout extends JDialog implements ActionListener{
         DefaultTableModel model = new DefaultTableModel(numRows, colHeadings.length);
         model.setColumnIdentifiers (colHeadings);
         table = new JTable (model);
+        table.putClientProperty("terminateEditOnFocusLost", true);
         tableHeadingPanel.add(table, BorderLayout.CENTER);
         tableHeadingPanel.add(table.getTableHeader(), BorderLayout.NORTH);
         tablePanel.add(tableHeadingPanel, BorderLayout.CENTER);
@@ -191,12 +243,15 @@ class InsertWorkout extends JDialog implements ActionListener{
             }
         });
         tablePanel.setBorder(new EmptyBorder(15, 10, 15, 10));
+        tables.add(table);
         return tablePanel;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        submit.setEnabled(true);
+        Component[] components = panel1.getComponents();
+        String titleValue = title.getText();
+        String amountValue = amount.getText();
         if(!isNumeric(amount.getText())){
             JOptionPane.showMessageDialog(
                 null,
@@ -205,12 +260,30 @@ class InsertWorkout extends JDialog implements ActionListener{
                 JOptionPane.ERROR_MESSAGE
             );
             generate.setEnabled(true);
-        }else{
+        }else if(title.getText().equals("")){
+            JOptionPane.showMessageDialog(
+                null,
+                "Title can't be empty",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+        else{
+            submit.setEnabled(true);
             for (int i = 0; i < Integer.parseInt(amount.getText()); i++) {
                 panel5.add(createExercisePanel());
             }
             generate.setEnabled(false);
+
+            for (Component c : components){
+                panel1.remove(c);
+            }
+            panel1.add(titleLable);
+            panel1.add(new JLabel(titleValue));
+            panel1.add(amountLable);
+            panel1.add(new JLabel(amountValue));
         }
+        panel1.revalidate();
         panel5.revalidate();
         validate();
     }

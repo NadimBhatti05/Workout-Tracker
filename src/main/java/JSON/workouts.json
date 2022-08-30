@@ -1,6 +1,6 @@
 [
   {
-    "date": "8/8/22",
+    "date": "8.8.22",
     "name": "Push",
     "workoutUUID": "472cef8e-0865-4368-ada9-53b93c0bf547",
     "exercisesUUID": [
@@ -10,7 +10,7 @@
     ]
   },
   {
-    "date": "9/8/22",
+    "date": "9.8.22",
     "name": "Legs",
     "workoutUUID": "d54c370f-29cd-4370-8aa1-32cbce8810c9",
     "exercisesUUID": [
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "date": "23/8/22",
+    "date": "23.8.22",
     "name": "Pull",
     "workoutUUID": "44c140b4-cb1f-4091-9238-060e847806a1",
     "exercisesUUID": [
@@ -28,6 +28,14 @@
       "887c9486-0328-4ca0-86e9-a0289372c07d",
       "052bb5c2-943c-4906-9869-ceac901cf4d1",
       "3a9ce610-8de7-494f-b878-b5b26207405f"
+    ]
+  },
+  {
+    "date": "30.08.22",
+    "name": "Test",
+    "workoutUUID": "44663ab9-cec5-499f-a7e7-817e28be0c39",
+    "exercisesUUID": [
+      "9769e38f-ffa2-424c-81f0-eddb5cc5d0e9"
     ]
   }
 ]
