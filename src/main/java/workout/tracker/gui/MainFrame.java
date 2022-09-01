@@ -20,6 +20,13 @@ import java.util.Vector;
 public class MainFrame extends JFrame {
     private JList<JPanel> workouts;
     private User user;
+    private JPanel panel1;
+    private JPanel panel2;
+    private JPanel panel3;
+    private JPanel panel4;
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
 
     public MainFrame(User user) {
         this.user = user;
@@ -33,33 +40,30 @@ public class MainFrame extends JFrame {
 
     public void components() {
         this.setLayout(new BorderLayout());
-        JPanel panel1 = new JPanel();
+        panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1,  BoxLayout.Y_AXIS));
-        JPanel panel2 = new JPanel(new BorderLayout());
-        JButton button = new JButton("New Workout");
-        JButton button1 = new JButton("Reload");
+        panel2 = new JPanel(new BorderLayout());
+        button1 = new JButton("New Workout");
+        button2 = new JButton("Reload");
         this.workouts = new JList<>();
-        int v = 0;
         for (int i = 0; i < user.getWorkouts().size(); i++) {
             panel1.add(createWorkoutPanel(user.getWorkouts().get(i)));
-            v += user.getWorkouts().get(i).getExercises().size()*120;
         }
-        button.addActionListener(new ActionListener() {
+        button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new InsertWorkout(user);
             }
         });
-        button1.addActionListener(new ActionListener() {
+        button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new MainFrame(user);
                 dispose();
             }
         });
-        panel2.add(button, BorderLayout.EAST);
-        panel2.add(button1, BorderLayout.WEST);
-        //panel1.setPreferredSize(new Dimension(400, v));
+        panel2.add(button1, BorderLayout.EAST);
+        panel2.add(button2, BorderLayout.WEST);
         JScrollPane scrollPane = new JScrollPane(panel1);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         this.add(scrollPane, BorderLayout.CENTER);
@@ -69,12 +73,26 @@ public class MainFrame extends JFrame {
     public JPanel createWorkoutPanel(Workout workout) {
         JPanel panel1 = new JPanel(new BorderLayout());
         JPanel panel2 = new JPanel(new FlowLayout());
+        JPanel panel3 = new JPanel(new GridLayout(1, 2));
+        JPanel panel4 = new JPanel(new BorderLayout());
+        JButton delete = new JButton("Delete");
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new DeleteConfirmation(workout, user);
+                dispose();
+            }
+        });
         JLabel label = new JLabel(workout.getName() + " (" + workout.getDate() + ")");
+        panel3.add(label);
+        panel4.add(delete, BorderLayout.EAST);
+        panel4.setBorder(new EmptyBorder(0, 0, 0, 30));
+        panel3.add(panel4);
         label.setFont(new Font("Courier", Font.BOLD, 16));
         for (int i = 0; i < workout.getExercises().size(); i++) {
             panel2.add(createExercisePanel(workout.getExercises().get(i)));
         }
-        panel1.add(label, BorderLayout.NORTH);
+        panel1.add(panel3, BorderLayout.NORTH);
         panel1.add(panel2, BorderLayout.CENTER);
         panel1.setBorder(new EmptyBorder(10, 10 , 10, 10));
         panel1.setPreferredSize(new Dimension(400, workout.getExercises().size()*120));
@@ -128,6 +146,7 @@ class InsertWorkout extends JDialog implements ActionListener{
         setTitle("New Workout");
         setResizable(false);
         setSize(400, 500);
+        setLocation(500, 0);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         components();
         setVisible(true);
@@ -176,8 +195,8 @@ class InsertWorkout extends JDialog implements ActionListener{
                     double[] weights = new double[tables.get(i).getRowCount()];
                     int [] reps = new int[tables.get(i).getRowCount()];
                     for (int j = 0; j < tables.get(i).getRowCount(); j++) {
-                        weights[i] = Double.parseDouble(String.valueOf(tables.get(i).getModel().getValueAt(i, 1)));
-                        reps[i] = Integer.parseInt(String.valueOf(tables.get(i).getModel().getValueAt(i, 2)));
+                        weights[j] = Double.parseDouble(String.valueOf(tables.get(i).getModel().getValueAt(j, 1)));
+                        reps[j] = Integer.parseInt(String.valueOf(tables.get(i).getModel().getValueAt(j, 2)));
                     }
                     exercise.setName(names.get(i).getText());
                     exercise.setExerciseUUID(UUID.randomUUID().toString());
@@ -217,8 +236,7 @@ class InsertWorkout extends JDialog implements ActionListener{
         });
         names.add(titleField);
         JButton button = new JButton("Add Set");
-        buttonPanel.add(button, BorderLayout.WEST);
-        tablePanel.add(buttonPanel, BorderLayout.SOUTH);
+        tablePanel.add(button, BorderLayout.SOUTH);
         JTable table;
         String [] colHeadings = {"Set", "Weight", "Reps"};
         int numRows = 0;
@@ -298,5 +316,66 @@ class InsertWorkout extends JDialog implements ActionListener{
             return false;
         }
         return true;
+    }
+}
+
+class DeleteConfirmation extends JFrame{
+
+    private User user;
+    private Workout workout;
+    private JLabel label;
+    private JPanel panel1;
+    private JPanel panel2;
+    private JPanel panel3;
+    private JPanel panel4;
+    private JButton cancel;
+    private JButton delete;
+
+
+    public DeleteConfirmation(Workout workout, User user){
+        this.user = user;
+        this.workout = workout;
+        setTitle("Warning");
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        components();
+        pack();
+        setVisible(true);
+    }
+
+    public void components(){
+        setLayout(new BorderLayout());
+        label = new JLabel("Would you like to delete this Workout?");
+        panel1 = new JPanel(new GridLayout(1, 2));
+        panel2 = new JPanel(new BorderLayout());
+        panel3 = new JPanel(new BorderLayout());
+        panel4 = new JPanel(new BorderLayout());
+        cancel = new JButton("Cancel");
+        delete = new JButton("Delete");
+        panel4.add(cancel, BorderLayout.WEST);
+        panel1.add(panel4);
+        panel3.add(delete, BorderLayout.EAST);
+        panel1.add(panel3);
+        panel2.add(label, BorderLayout.CENTER);
+        panel2.setBorder(new EmptyBorder(30, 30, 30, 30));
+        panel1.setBorder(new EmptyBorder(10, 20, 5, 20));
+        this.add(panel1, BorderLayout.SOUTH);
+        this.add(panel2, BorderLayout.CENTER);
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new MainFrame(user);
+            }
+        });
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DataHandler.deleteWorkout(user, workout);
+                dispose();
+                new MainFrame(user);
+            }
+        });
     }
 }

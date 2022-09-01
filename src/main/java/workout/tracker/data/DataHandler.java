@@ -17,9 +17,9 @@ import java.util.UUID;
 import java.util.Vector;
 
 public class DataHandler {
-    private static List<User> userList;
-    private static List<Workout> workoutList;
-    private static List<Exercise> exerciseList;
+    private static Vector<User> userList;
+    private static Vector<Workout> workoutList;
+    private static Vector<Exercise> exerciseList;
 
     public DataHandler(){}
 
@@ -120,7 +120,7 @@ public class DataHandler {
     }
 
 
-    public static List<User> getUserList() {
+    public static Vector<User> getUserList() {
         if(DataHandler.userList == null){
             DataHandler.setUserList(new Vector<>());
             readUserJSON();
@@ -128,7 +128,7 @@ public class DataHandler {
         return userList;
     }
 
-    public static void setUserList(List<User> userList) {
+    public static void setUserList(Vector<User> userList) {
         DataHandler.userList = userList;
     }
 
@@ -216,18 +216,22 @@ public class DataHandler {
         writeWorkoutJSON();
     }
 
-    public static boolean deleteWorkout(String uuid) {
-        Workout workout = readWorkout(uuid);
+    public static boolean deleteWorkout(User user, Workout workout) {
         if (workout != null) {
             getWorkoutList().remove(workout);
             writeWorkoutJSON();
+            user.setWorkouts(getWorkoutList());
+            writeUserJSON();
+            for (int i = 0; i < workout.getExercises().size(); i++) {
+                deleteExercise(workout.getExercises().get(i));
+            }
             return true;
         } else {
             return false;
         }
     }
 
-    public static List<Workout> getWorkoutList() {
+    public static Vector<Workout> getWorkoutList() {
         if(DataHandler.workoutList == null){
             DataHandler.setWorkoutList(new Vector<>());
             readWorkoutJSON();
@@ -235,7 +239,7 @@ public class DataHandler {
         return workoutList;
     }
 
-    public static void setWorkoutList(List<Workout> workoutList) {
+    public static void setWorkoutList(Vector<Workout> workoutList) {
         DataHandler.workoutList = workoutList;
     }
 
@@ -317,8 +321,7 @@ public class DataHandler {
         writeExerciseJSON();
     }
 
-    public static boolean deleteExercise(String uuid) {
-        Exercise exercise = readExercise(uuid);
+    public static boolean deleteExercise(Exercise exercise) {
         if (exercise != null) {
             getExerciseList().remove(exercise);
             writeExerciseJSON();
@@ -328,7 +331,7 @@ public class DataHandler {
         }
     }
 
-    public static List<Exercise> getExerciseList() {
+    public static Vector<Exercise> getExerciseList() {
         if(DataHandler.exerciseList == null){
             DataHandler.setExerciseList(new Vector<>());
             readExerciseJSON();
@@ -336,7 +339,7 @@ public class DataHandler {
         return exerciseList;
     }
 
-    public static void setExerciseList(List<Exercise> exerciseList) {
+    public static void setExerciseList(Vector<Exercise> exerciseList) {
         DataHandler.exerciseList = exerciseList;
     }
 }
