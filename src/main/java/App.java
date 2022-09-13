@@ -11,13 +11,6 @@ import java.util.UUID;
 public class App {
 
     public static void main(String[] args) {
-        //new Login();
-        new MainFrame(DataHandler.readUser("NadimBhatti", "1234"));
-        LocalDate today = LocalDate.now();
-        //System.out.println(UUID.randomUUID());
-        /*
-        Workout workout = new Workout("Push", UUID.randomUUID().toString(), today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)));
-        System.out.println(workout.getDate() + "\n" + workout.getUuid());
-         */
+        new Login();
     }
 }

@@ -23,13 +23,6 @@ public class DataHandler {
 
     public DataHandler(){}
 
-    //main method for testing purposes
-    public static void main(String[] args) {
-        writeUserJSON();
-        writeWorkoutJSON();
-        writeExerciseJSON();
-    }
-
     public static void initializeLists(){
         DataHandler.setUserList(null);
         DataHandler.setWorkoutList(null);

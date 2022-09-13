@@ -95,7 +95,7 @@ public class MainFrame extends JFrame {
         panel1.add(panel3, BorderLayout.NORTH);
         panel1.add(panel2, BorderLayout.CENTER);
         panel1.setBorder(new EmptyBorder(10, 10 , 10, 10));
-        panel1.setPreferredSize(new Dimension(400, workout.getExercises().size()*120));
+        panel1.setPreferredSize(new Dimension(400, workout.getExercises().size()*120 + 20));
         return panel1;
     }
 
@@ -372,7 +372,16 @@ class DeleteConfirmation extends JFrame{
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DataHandler.deleteWorkout(user, workout);
+                if(DataHandler.deleteWorkout(user, workout)){
+                    System.out.println("deleted " + workout.getUuid());
+                }else{
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "Ooops, something went wrong",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                }
                 dispose();
                 new MainFrame(user);
             }
